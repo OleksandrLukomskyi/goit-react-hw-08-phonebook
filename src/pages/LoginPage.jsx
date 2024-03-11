@@ -1,24 +1,26 @@
 import { LoginForm } from "components/LoginForm/LoginForm"
-import { useEffect } from "react"
-import { useSelector } from "react-redux"
-import { useNavigate } from "react-router"
+
+import { useDispatch} from "react-redux"
+
+import { logInThunk} from "store/auth/authThunk"
+
 
 
 const LoginPage = () => {
-   const isAuth = useSelector(state=>state.auth.access_token)
-  
-   const navigate = useNavigate()
-useEffect(() => {
-  isAuth&&navigate('/')
-}, [isAuth, navigate])
+
+const dispatch = useDispatch()
 
 
+
+const login = (body) => {
+   dispatch(logInThunk(body))
+}
  
 
    return (
    
        
-        <LoginForm/>
+        <LoginForm login={login}/>
       
    )
 }
