@@ -4,42 +4,41 @@ import {
   deleteContactApi,
   fetchContactsApi,
 } from 'api/contacts';
+import { getProfileThunk } from 'store/auth/authThunk';
 
 export const fetchContactsThunk = createAsyncThunk(
   'contacts/fetchAll',
 
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
-      return await fetchContactsApi(getState().auth.token);
+      await dispatch(getProfileThunk());
+      return await fetchContactsApi();
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const deleteContactThunk = createAsyncThunk(
   'contacts/deleteContact',
-  async (contactId, { rejectWithValue, getState }) => {
+  async (contactId, { rejectWithValue }) => {
     try {
-      await deleteContactApi(contactId, getState().auth.token);
+      await deleteContactApi(contactId);
 
       return contactId;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );
 export const addContactPostThunk = createAsyncThunk(
   'contacts/addContact',
-  async (newContact, { rejectWithValue, getState }) => {
+  async (newContact, { rejectWithValue }) => {
     try {
-      const addedContact = await addContactApi(
-        newContact,
-        getState().auth.token
-      );
+      const addedContact = await addContactApi(newContact);
       return addedContact;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );

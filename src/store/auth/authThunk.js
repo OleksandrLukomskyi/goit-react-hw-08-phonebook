@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { setAuthHeader } from 'api/api';
 import { getProfile, logInApi, logOut, signUpApi } from 'api/auth-service';
 
 export const logInThunk = createAsyncThunk(
@@ -7,29 +8,34 @@ export const logInThunk = createAsyncThunk(
     try {
       return await logInApi(body);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const logOutThunk = createAsyncThunk(
   'auth/logout',
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await logOut(getState().auth.token);
+      return await logOut();
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const getProfileThunk = createAsyncThunk(
   'users/current',
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue }) => {
+    const state = rejectWithValue.getState();
+    const persistedToken = state.auth.token;
+    console.log(persistedToken);
     try {
-      return await getProfile(getState().auth.token);
+      setAuthHeader(persistedToken);
+      console.log('Token before fetching profile:', persistedToken);
+      return await getProfile();
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -40,7 +46,7 @@ export const signUpThunk = createAsyncThunk(
     try {
       return await signUpApi(body);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.message);
     }
   }
 );

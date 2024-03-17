@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router';
 import React, { Suspense, lazy, useEffect } from 'react';
 import Layout from 'components/Layout/Layout';
-import '../../store/store';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { profileSelector } from 'store/auth/selectorsAuth';
 import { getProfileThunk } from 'store/auth/authThunk';
@@ -12,6 +12,7 @@ const HomePage = lazy(() => import('pages/HomePage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
 const RegistrationPage = lazy(() => import('pages/RegistrationPage'));
+
 const App = () => {
   const profile = useSelector(profileSelector);
   const dispatch = useDispatch();
@@ -23,8 +24,8 @@ const App = () => {
   return (
     <>
       <Loader />
-      {/* <Suspense fallback={<>loading...</>}> */}
-      <Suspense>
+      <Suspense fallback={<>loading...</>}>
+      {/* <Suspense> */}
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
