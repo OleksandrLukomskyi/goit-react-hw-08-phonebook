@@ -1,4 +1,3 @@
-//
 import axios from 'axios';
 import { clearAuthHeader, setAuthHeader } from './api';
 
@@ -15,31 +14,15 @@ export const logInApi = async body => {
   return data;
 };
 
-// export const logOut = async token => {
-//   const { data } = await api.post('/users/logout', {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-//   return data;
-// };
 export const logOut = async () => {
   const { data } = await axios.post('/users/logout');
   clearAuthHeader();
+  localStorage.clear();
   return data;
 };
 
-// export const getProfile = async token => {
-//   const { data } = await api('/users/current', {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-//   return data;
-// };
-
 export const getProfile = async () => {
-  const { data } = await axios('/users/current');
+  const { data } = await axios.get('/users/current');
 
   return data;
 };

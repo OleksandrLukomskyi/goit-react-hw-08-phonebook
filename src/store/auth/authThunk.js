@@ -29,13 +29,17 @@ export const getProfileThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const state = rejectWithValue.getState();
     const persistedToken = state.auth.token;
-    console.log(persistedToken);
-    try {
+
+    if (!persistedToken) {
+      return;
+    } else {
       setAuthHeader(persistedToken);
-      console.log('Token before fetching profile:', persistedToken);
-      return await getProfile();
-    } catch (error) {
-      return rejectWithValue(error.message);
+      try {
+        console.log('Token before fetching profile:', persistedToken);
+        return await getProfile();
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
     }
   }
 );

@@ -8,7 +8,7 @@ const ContactListItem = ({ item }) => {
 
   return (
     <li key={item.id} className={css.item}>
-      {item.name} - {item.phone}
+      {item.name} - {item.number}
       <button
         className={css.button}
         type="button"

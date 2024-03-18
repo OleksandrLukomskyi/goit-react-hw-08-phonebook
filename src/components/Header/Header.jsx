@@ -7,6 +7,7 @@ import { profileSelector } from 'store/auth/selectorsAuth';
 
 export const Header = () => {
 const profile = useSelector(profileSelector)
+console.log(profile);
 const navigate = useNavigate()
 const dispatch = useDispatch()
  
@@ -17,6 +18,7 @@ const dispatch = useDispatch()
   }
 
   return (
+    
     <header>
       <nav>
         <ul>
@@ -43,7 +45,7 @@ const dispatch = useDispatch()
                <NavLink to="/login">Login</NavLink>
           </li> */}
           {profile ? (<button onClick={handleLogOut}>Logout</button>) : (<button><NavLink to='/login'>Login</NavLink></button>)}
-          {profile && <p> {profile.name}</p>}
+          {profile && <p> {profile.email}</p>}
           
         </ul>
       </nav>

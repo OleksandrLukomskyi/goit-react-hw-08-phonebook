@@ -3,27 +3,26 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import css from './ContactForm.module.css';
 
-import { nanoid } from '@reduxjs/toolkit';
 import { addContactPostThunk } from 'store/contacts/thunksContacts';
 import { selectorContacts } from 'store/contacts/selector';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
 
   const dispatch = useDispatch();
   const items = useSelector(selectorContacts);
 
   const handleChange = e => {
     const { name, value } = e.target;
-    name === 'name' ? setName(value) : setPhone(value);
+    name === 'name' ? setName(value) : setNumber(value);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
     const isExist = items.some(
-      item => item.name === name.trim() || item.phone === phone.trim()
+      item => item.name === name.trim() || item.number === number.trim()
     );
 
     if (isExist) {
@@ -32,14 +31,13 @@ const ContactForm = () => {
     }
 
     const newContact = {
-      id: nanoid(),
       name: name.trim(),
-      phone: phone.trim(),
+      number: number.trim(),
     };
 
     dispatch(addContactPostThunk(newContact));
 
-    setPhone('');
+    setNumber('');
     setName('');
 
     e.target.reset();
@@ -60,12 +58,12 @@ const ContactForm = () => {
         />
       </label>
       <label className={css.inputBloc}>
-        Numer
+        Number
         <input
           type="tel"
-          name="phone"
+          name="number"
           placeholder="459-12-56"
-          value={phone}
+          value={number}
           onChange={handleChange}
           pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
           required
