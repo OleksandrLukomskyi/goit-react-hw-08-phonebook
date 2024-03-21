@@ -4,14 +4,14 @@ import {
   deleteContactApi,
   fetchContactsApi,
 } from 'api/contacts';
-import { getProfileThunk } from 'store/auth/authThunk';
+import { refreshProfileThunk } from 'store/auth/authThunk';
 
 export const fetchContactsThunk = createAsyncThunk(
   'contacts/fetchAll',
 
   async (_, { rejectWithValue, dispatch }) => {
     try {
-      await dispatch(getProfileThunk());
+      await dispatch(refreshProfileThunk());
       return await fetchContactsApi();
     } catch (error) {
       return rejectWithValue(error.message);

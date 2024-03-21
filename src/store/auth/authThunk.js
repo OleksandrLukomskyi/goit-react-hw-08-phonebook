@@ -1,6 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { setAuthHeader } from 'api/api';
-import { getProfile, logInApi, logOut, signUpApi } from 'api/auth-service';
+import {
+  logInApi,
+  logOut,
+  refreshProfile,
+  registerApi,
+} from 'api/auth-service';
 
 export const logInThunk = createAsyncThunk(
   'auth/login',
@@ -24,31 +29,31 @@ export const logOutThunk = createAsyncThunk(
   }
 );
 
-export const getProfileThunk = createAsyncThunk(
+export const refreshProfileThunk = createAsyncThunk(
   'users/current',
   async (_, { rejectWithValue }) => {
     const state = rejectWithValue.getState();
     const persistedToken = state.auth.token;
 
-    if (!persistedToken) {
-      return;
-    } else {
+    if (persistedToken === null) {
+      return rejectWithValue('Unable to fetch user');
+    }
+
+    try {
       setAuthHeader(persistedToken);
-      try {
-        console.log('Token before fetching profile:', persistedToken);
-        return await getProfile();
-      } catch (error) {
-        return rejectWithValue(error.message);
-      }
+      console.log('Token before fetching profile:', persistedToken);
+      return await refreshProfile();
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const signUpThunk = createAsyncThunk(
+export const registerThunk = createAsyncThunk(
   'auth/register',
   async (body, { rejectWithValue }) => {
     try {
-      return await signUpApi(body);
+      return await registerApi(body);
     } catch (error) {
       return rejectWithValue(error.message);
     }

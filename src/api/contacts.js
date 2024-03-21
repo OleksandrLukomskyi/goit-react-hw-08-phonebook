@@ -2,10 +2,10 @@ import axios from 'axios';
 import { setAuthHeader } from './api';
 axios.defaults.baseURL = 'https://connections-api.herokuapp.com';
 
-// const token = localStorage.getItem('token');
-// if (token) {
-//   setAuthHeader(token);
-// }
+const token = localStorage.getItem('token');
+if (token) {
+  setAuthHeader(token);
+}
 
 export const fetchContactsApi = async () => {
   try {
